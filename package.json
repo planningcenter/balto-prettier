@@ -1,0 +1,15 @@
+{
+  "name": "balto-prettier",
+  "version": "0.1.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "GITHUB_EVENT_PATH=./test/pull_request_payload.json INPUT_EXTENSIONS=js,jsx,rb,rake node main.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/exec": "^1.0.1",
+    "@actions/io": "^1.0.1"
+  }
+}
