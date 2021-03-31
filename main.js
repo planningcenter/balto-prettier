@@ -1,4 +1,5 @@
 const io = require('@actions/io')
+const core = require('@actions/core')
 const { easyExec } = require('./utils')
 
 const {
@@ -77,7 +78,6 @@ async function runPrettier () {
     .split('\n')
     .filter(path => extensions.some(e => path.endsWith(`.${e}`)))
   await easyExec(`${executable} --write ${paths.join(' ')}`)
-  // TODO: some sort of error handling
 }
 
 async function run () {
@@ -86,11 +86,7 @@ async function run () {
     await installPrettierPackagesAsync()
     report = await runPrettier()
   } catch (e) {
-    // TODO: handle error
-    console.log(e)
-  } finally {
-    // TODO: success
-    console.log("SUCCESS!!")
+    core.setFailed(e.message)
   }
 }
 
