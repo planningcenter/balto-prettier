@@ -1,7 +1,9 @@
 const io = require('@actions/io')
 const core = require('@actions/core')
 const { easyExec } = require('./utils')
-const rubyPlugin = require('./ruby')
+
+const availablePlugins = ['./ruby'].map(require)
+const enabledPlugins = []
 
 const {
   GITHUB_WORKSPACE,
@@ -81,15 +83,17 @@ async function runPrettier () {
 async function setup() {
   const packages = await installPrettierPackages()
 
-  const rubyPluginVersion = packages.find(p => p.match(rubyPlugin.packageMatcher))
-  if (rubyPluginVersion) {
-    await rubyPlugin.setup()
-  }
+  availablePlugins.forEach((p) => {
+    if (packages.find(pa => pa.match(p.packageMatcher))) {
+      enabledPlugins.push(p)
+    }
+  })
+  await Promise.all(enabledPlugins.map(async (p) => await p.setup()))
 }
 
 async function teardown() {
   await io.mv('package.json-bak', 'package.json')
-  await rubyPlugin.teardown()
+  await Promise.all(enabledPlugins.map(async (p) => await p.teardown()))
 }
 
 async function run () {
