@@ -51,16 +51,12 @@ async function installPrettierPackages () {
 
   await io.mv('package.json', 'package.json-bak')
 
-  try {
-    const { error } = await easyExec(
-      ['npm i', ...versions, '--no-package-lock'].join(' ')
-    )
-    const peerVersions = await getPeerDependencies(error)
-    if (peerVersions.length > 0) {
-      await easyExec(['npm i', ...peerVersions, '--no-package-lock'].join(' '))
-    }
-  } finally {
-    await io.mv('package.json-bak', 'package.json')
+  const { error } = await easyExec(
+    ['npm i', ...versions, '--no-package-lock'].join(' ')
+  )
+  const peerVersions = await getPeerDependencies(error)
+  if (peerVersions.length > 0) {
+    await easyExec(['npm i', ...peerVersions, '--no-package-lock'].join(' '))
   }
 }
 
@@ -84,6 +80,10 @@ async function setup() {
   await installPrettierPackages()
 }
 
+async function teardown() {
+  await io.mv('package.json-bak', 'package.json')
+}
+
 async function run () {
   try {
     process.chdir(GITHUB_WORKSPACE)
@@ -91,6 +91,8 @@ async function run () {
     report = await runPrettier()
   } catch (e) {
     core.setFailed(e.message)
+  } finally {
+    await teardown()
   }
 }
 
