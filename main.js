@@ -1,6 +1,7 @@
 const io = require('@actions/io')
 const core = require('@actions/core')
 const { easyExec } = require('./utils')
+const rubyPlugin = require('./ruby')
 
 const {
   GITHUB_WORKSPACE,
@@ -58,6 +59,7 @@ async function installPrettierPackages () {
   if (peerVersions.length > 0) {
     await easyExec(['npm i', ...peerVersions, '--no-package-lock'].join(' '))
   }
+  return versions
 }
 
 async function runPrettier () {
@@ -77,11 +79,17 @@ async function runPrettier () {
 }
 
 async function setup() {
-  await installPrettierPackages()
+  const packages = await installPrettierPackages()
+
+  const rubyPluginVersion = packages.find(p => p.match(/prettier\/plugin-ruby/))
+  if (rubyPluginVersion) {
+    await rubyPlugin.setup()
+  }
 }
 
 async function teardown() {
   await io.mv('package.json-bak', 'package.json')
+  await rubyPlugin.teardown()
 }
 
 async function run () {
