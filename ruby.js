@@ -37,3 +37,5 @@ exports.setup = async function setup() {
 exports.teardown = async function teardown() {
   await io.mv("Gemfile.bak", "Gemfile")
 }
+
+exports.packageMatcher = /prettier\/plugin-ruby/

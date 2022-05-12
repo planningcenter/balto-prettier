@@ -81,7 +81,7 @@ async function runPrettier () {
 async function setup() {
   const packages = await installPrettierPackages()
 
-  const rubyPluginVersion = packages.find(p => p.match(/prettier\/plugin-ruby/))
+  const rubyPluginVersion = packages.find(p => p.match(rubyPlugin.packageMatcher))
   if (rubyPluginVersion) {
     await rubyPlugin.setup()
   }
