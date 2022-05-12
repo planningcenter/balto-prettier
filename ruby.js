@@ -39,3 +39,4 @@ exports.teardown = async function teardown() {
 }
 
 exports.packageMatcher = /prettier\/plugin-ruby/
+exports.name = "Ruby"

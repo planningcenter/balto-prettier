@@ -85,6 +85,7 @@ async function setup() {
 
   availablePlugins.forEach((p) => {
     if (packages.find(pa => pa.match(p.packageMatcher))) {
+      console.log(`Enabling plugin: ${p.name}`)
       enabledPlugins.push(p)
     }
   })
