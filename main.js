@@ -42,7 +42,7 @@ async function getPeerDependencies (error) {
   return versions
 }
 
-async function installPrettierPackagesAsync () {
+async function installPrettierPackages () {
   const yarn = await getYarn()
 
   const versions = yarn.data.trees
@@ -83,7 +83,7 @@ async function runPrettier () {
 async function run () {
   try {
     process.chdir(GITHUB_WORKSPACE)
-    await installPrettierPackagesAsync()
+    await installPrettierPackages()
     report = await runPrettier()
   } catch (e) {
     core.setFailed(e.message)
