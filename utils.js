@@ -4,6 +4,8 @@ exports.easyExec = async function easyExec (commandWithArgs) {
   let output = ''
   let error = ''
 
+  const debugMode = `${process.env.ACTIONS_STEP_DEBUG}`.toLowerCase() === "true"
+
   const options = {
     listeners: {
       stdout: data => {
@@ -13,7 +15,7 @@ exports.easyExec = async function easyExec (commandWithArgs) {
         error += data.toString()
       }
     },
-    silent: true
+    silent: !debugMode
   }
 
   const commandParts = commandWithArgs.split(' ')
