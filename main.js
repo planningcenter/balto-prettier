@@ -80,10 +80,14 @@ async function runPrettier () {
   await easyExec(`${executable} --write ${paths.join(' ')}`)
 }
 
+async function setup() {
+  await installPrettierPackages()
+}
+
 async function run () {
   try {
     process.chdir(GITHUB_WORKSPACE)
-    await installPrettierPackages()
+    await setup()
     report = await runPrettier()
   } catch (e) {
     core.setFailed(e.message)
