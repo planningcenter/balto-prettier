@@ -20,7 +20,7 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
-      - uses: planningcenter/balto-prettier@v0.1
+      - uses: planningcenter/balto-prettier@v0.2
         with:
           extensions: js,jsx
       - uses: stefanzweifel/git-auto-commit-action@v4
@@ -28,7 +28,11 @@ jobs:
           commit_message: Formatting by balto-prettier
 ```
 
-If you're using prettier plugins that rely on other tools or languages, you'll need to set those up, as well. For example, using the Ruby plugin to do the same sort of formatting commit as above might look like this:
+### prettier/plugin-ruby
+
+While you can use the [prettier plugin for Ruby](https://github.com/prettier/plugin-ruby) from node, for newer versions of the plugin (>= 3.0), you'll also need a few Ruby gems installed. The easiest way to make sure those dependencies are in place is for your project to include the [prettier gem](https://rubygems.org/gems/prettier) and keep that version synced with the version of the node package.
+
+If your project uses this plugin and it's part of your package.json, this action will automatically detect it and install the prettier gem from your Gemfile.lock. It's also setup so that you don't need to install all of your project's dependencies (note the `bundle: none` in the example below), making it quick.
 
 ```yaml
 name: Balto
@@ -45,8 +49,8 @@ jobs:
           fetch-depth: 0
       - uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
-      - uses: planningcenter/balto-prettier@v0.1
+          bundler: none
+      - uses: planningcenter/balto-prettier@v0.2
         with:
           extensions: js,jsx,rb,rake
       - uses: stefanzweifel/git-auto-commit-action@v4
@@ -54,6 +58,9 @@ jobs:
           commit_message: Formatting by balto-prettier
 ```
 
+### Other Plugins
+
+If you're using other prettier plugins that rely on other tools or languages, you'll need to set those up, with other actions or steps.
 
 ## Inputs
 
