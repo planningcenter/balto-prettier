@@ -77,7 +77,9 @@ async function runPrettier () {
   const paths = output
     .split('\n')
     .filter(path => extensions.some(e => path.endsWith(`.${e}`)))
-  await easyExec(`${executable} --write ${paths.join(' ')}`)
+  if (paths.length > 0) {
+    await easyExec(`${executable} --write ${paths.join(' ')}`)
+  }
 }
 
 async function setup() {
