@@ -2,6 +2,9 @@ const io = require('@actions/io')
 const core = require('@actions/core')
 const { easyExec } = require('./utils')
 
+const availablePlugins = ['./ruby'].map(require)
+const enabledPlugins = []
+
 const {
   GITHUB_WORKSPACE,
   INPUT_EXTENSIONS,
@@ -42,7 +45,7 @@ async function getPeerDependencies (error) {
   return versions
 }
 
-async function installPrettierPackagesAsync () {
+async function installPrettierPackages () {
   const yarn = await getYarn()
 
   const versions = yarn.data.trees
@@ -51,17 +54,14 @@ async function installPrettierPackagesAsync () {
 
   await io.mv('package.json', 'package.json-bak')
 
-  try {
-    const { error } = await easyExec(
-      ['npm i', ...versions, '--no-package-lock'].join(' ')
-    )
-    const peerVersions = await getPeerDependencies(error)
-    if (peerVersions.length > 0) {
-      await easyExec(['npm i', ...peerVersions, '--no-package-lock'].join(' '))
-    }
-  } finally {
-    await io.mv('package.json-bak', 'package.json')
+  const { error } = await easyExec(
+    ['npm i', ...versions, '--no-package-lock'].join(' ')
+  )
+  const peerVersions = await getPeerDependencies(error)
+  if (peerVersions.length > 0) {
+    await easyExec(['npm i', ...peerVersions, '--no-package-lock'].join(' '))
   }
+  return versions
 }
 
 async function runPrettier () {
@@ -77,16 +77,37 @@ async function runPrettier () {
   const paths = output
     .split('\n')
     .filter(path => extensions.some(e => path.endsWith(`.${e}`)))
-  await easyExec(`${executable} --write ${paths.join(' ')}`)
+  if (paths.length > 0) {
+    await easyExec(`${executable} --write ${paths.join(' ')}`)
+  }
+}
+
+async function setup() {
+  const packages = await installPrettierPackages()
+
+  availablePlugins.forEach((p) => {
+    if (packages.find(pa => pa.match(p.packageMatcher))) {
+      console.log(`Enabling plugin: ${p.name}`)
+      enabledPlugins.push(p)
+    }
+  })
+  await Promise.all(enabledPlugins.map(async (p) => await p.setup()))
+}
+
+async function teardown() {
+  await io.mv('package.json-bak', 'package.json')
+  await Promise.all(enabledPlugins.map(async (p) => await p.teardown()))
 }
 
 async function run () {
   try {
     process.chdir(GITHUB_WORKSPACE)
-    await installPrettierPackagesAsync()
+    await setup()
     report = await runPrettier()
   } catch (e) {
     core.setFailed(e.message)
+  } finally {
+    await teardown()
   }
 }
 
