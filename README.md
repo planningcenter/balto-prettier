@@ -5,7 +5,13 @@ Balto is Smart and Fast:
 * Installs _your_ versions of prettier and prettier plugins
 * _Only_ runs on files that have changed
 
-Sample config (place in `.github/workflows/balto.yml`) to format changed files in a pull request and commit the fixes:
+Balto is a composable action that runs `prettier --write` on changed files, and it's up to you do decide what you want to do with its results.
+
+## Example Usage
+
+By combining balto-prettier with [stefanzweifel/git-auto-commit-action](https://github.com/stefanzweifel/git-auto-commit-action) you could create a job that commits any changes made by prettier to the open PR, serving as a safety net for any contributors who don't have prettier setup in their editor or IDE.
+
+Here's a sample config that does just that (place in `.github/workflows/balto.yml`):
 
 ```yaml
 name: Balto
