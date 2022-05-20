@@ -5,10 +5,7 @@ const { easyExec } = require('./utils')
 const availablePlugins = ['./ruby'].map(require)
 const enabledPlugins = []
 
-const {
-  GITHUB_WORKSPACE,
-  INPUT_EXTENSIONS,
-} = process.env
+const { GITHUB_WORKSPACE } = process.env
 
 const event = require(process.env.GITHUB_EVENT_PATH)
 
@@ -72,11 +69,8 @@ async function runPrettier () {
   )
 
   const executable = `${GITHUB_WORKSPACE}/node_modules/.bin/prettier`
-  const extensions = INPUT_EXTENSIONS.split(',')
 
-  const paths = output
-    .split('\n')
-    .filter(path => extensions.some(e => path.endsWith(`.${e}`)))
+  const paths = output.split('\n')
   if (paths.length > 0) {
     await easyExec(`${executable} --write ${paths.join(' ')}`)
   }

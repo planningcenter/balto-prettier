@@ -6,8 +6,3 @@ runs:
 branding:
   icon: life-buoy
   color: orange
-inputs:
-  extensions:
-    description: "A comma separated list of extensions to run on"
-    require: false
-    default: "js"
