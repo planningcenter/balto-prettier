@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "GITHUB_EVENT_PATH=./test/pull_request_payload.json INPUT_EXTENSIONS=js,jsx,rb,rake node main.js"
+    "test": "GITHUB_EVENT_PATH=./test/pull_request_payload.json node main.js"
   },
   "author": "",
   "license": "MIT",

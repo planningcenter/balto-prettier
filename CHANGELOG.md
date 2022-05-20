@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+CHANGE: Remove `extensions` input
+
 ## v0.2 (2022-05-16)
 
 FEAT: Official support for running with prettier/plugin-ruby

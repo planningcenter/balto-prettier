@@ -27,8 +27,6 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
       - uses: planningcenter/balto-prettier@v0.2
-        with:
-          extensions: js,jsx
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Formatting by balto-prettier
@@ -57,8 +55,6 @@ jobs:
         with:
           bundler: none
       - uses: planningcenter/balto-prettier@v0.2
-        with:
-          extensions: js,jsx,rb,rake
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Formatting by balto-prettier
@@ -67,9 +63,3 @@ jobs:
 ### Other Plugins
 
 If you're using other prettier plugins that rely on other tools or languages, you'll need to set those up, with other actions or steps.
-
-## Inputs
-
-| Name | Description | Required | Default |
-|:-:|:-:|:-:|:-:|
-| `extensions` | A comma separated list of extensions to run Prettier on | no | `"js"` |
