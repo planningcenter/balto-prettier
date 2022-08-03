@@ -5,13 +5,17 @@ Balto is Smart and Fast:
 * Installs _your_ versions of prettier and prettier plugins
 * _Only_ runs on files that have changed
 
-Balto is a composable action that runs `prettier --write` on changed files, and it's up to you do decide what you want to do with its results.
+Balto Prettier comprises a few different actions: 
+
+* The core functionality is found at `planningcenter/balto-prettier`, which runs `prettier --write` on files that have changed. On its own this doesn't result in any action, but it can be combined with other actions for a variety of uses.
+* For a "batteries included" setup, `planningcenter/balto-prettier/autofix` will run the core action, commit anything that changed as a result, and add that commit to `.git-blame-ignore-revs`.
+* There's also a `planningcenter/balto-prettier/append-to-file` action that is really here for internal use. If you're brave, you can use it on its own, but there are no guarantees that it won't change without notice.
 
 ## Example Usage
 
-By combining balto-prettier with [stefanzweifel/git-auto-commit-action](https://github.com/stefanzweifel/git-auto-commit-action) you could create a job that commits any changes made by prettier to the open PR, serving as a safety net for any contributors who don't have prettier setup in their editor or IDE.
+Assuming most folks will opt for the autofix functionality, here's how you might set that up.
 
-Here's a sample config that does just that (place in `.github/workflows/balto.yml`):
+Sample config (place in `.github/workflows/balto.yml`):
 
 ```yaml
 name: Balto
@@ -22,16 +26,12 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          ref: ${{ github.head_ref }}
           fetch-depth: 0
-      - uses: planningcenter/balto-prettier@v0.2
+      - uses: planningcenter/balto-prettier/autofix@v1
         with:
           extensions: js,jsx
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Formatting by balto-prettier
 ```
 
 ### prettier/plugin-ruby
@@ -49,19 +49,13 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          ref: ${{ github.head_ref }}
           fetch-depth: 0
       - uses: ruby/setup-ruby@v1
-        with:
-          bundler: none
-      - uses: planningcenter/balto-prettier@v0.2
+      - uses: planningcenter/balto-prettier/autofix@v1
         with:
           extensions: js,jsx,rb,rake
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Formatting by balto-prettier
 ```
 
 ### Other Plugins

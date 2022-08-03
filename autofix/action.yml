@@ -8,14 +8,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: planningcenter/balto-prettier@main
+    - uses: planningcenter/balto-prettier@v1
       with:
         extensions: ${{ inputs.extensions }}
     - uses: stefanzweifel/git-auto-commit-action@v4
       id: balto-prettier-commit
       with:
         commit_message: Formatting by balto-prettier
-    - uses: planningcenter/balto-prettier/append-to-file@main
+    - uses: planningcenter/balto-prettier/append-to-file@v1
       if: steps.balto-prettier-commit.outputs.changes_detected == 'true'
       with:
         filepath: ${{ github.workspace}}/.git-blame-ignore-revs

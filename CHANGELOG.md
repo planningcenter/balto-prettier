@@ -2,10 +2,20 @@
 
 ## Unreleased
 
-## v0.2 (2022-05-16)
+## [1.0.0] - 2022-08-03
 
-FEAT: Official support for running with prettier/plugin-ruby
+### Added
+- Add autofix action
 
-## v0.1 (2021-03-31)
+## [0.2.0] - 2022-05-16
 
-Initial release
+- Official support for running with prettier/plugin-ruby
+
+## [0.1.0] - 2021-03-31
+
+- Initial release
+
+[Unreleased]: https://github.com/planningcenter/balto-prettier/compare/v1.0.0..main
+[1.0.0]: https://github.com/planningcenter/balto-prettier/compare/v0.2.0..v1.0.0
+[0.2.0]: https://github.com/planningcenter/balto-prettier/compare/v0.1.0..v0.2.0
+[0.1.0]: https://github.com/planningcenter/balto-prettier/compare/ddb3ef6..v0.1.0
