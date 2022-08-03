@@ -1,0 +1,14 @@
+name: "Append to File"
+description: "Append content to a file"
+inputs:
+  filepath:
+    description: "The path to the file to write"
+    required: true
+  contents:
+    description: "The contents to add"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - run: echo "${{ inputs.contents }}" >> ${{ inputs.filepath }}
+      shell: bash
