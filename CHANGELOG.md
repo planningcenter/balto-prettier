@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+**Note:** changes since v1.0.0 can be found on the [releases page](https://github.com/planningcenter/balto-prettier/releases)
 
 ## [1.0.0] - 2022-08-03
 
